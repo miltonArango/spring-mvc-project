@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Core Online Tutorial - Customer</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+
+    <!-- The CDNs have been added to where the tomcat container can find them. -->
+    <!-- The links go to cdn resources for the bootstrap css file. The Thymeleaf template
+    uses the path given here at runtime. When run in a browser the cdn resource is used. Under tomcat,
+    Thymeleaf engine finds the path to the cdn resource. -->
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen" />
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
+            th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+
+    <link href="../../static/css/spring-core.css"
+          th:href="@{css/spring-core.css}" rel="stylesheet" media="screen"/>
+</head>
+<body>
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Customer</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Id:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.id}">Customer Id</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Name:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.firstName + ' ' + customer.lastName}">Name</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Phone:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.phone}">Phone</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 sm-2 control-label">Email:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.email}">Email</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 sm-2 control-label">State:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.state}">State</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 sm-2 control-label">City:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.city}">City</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 sm-2 control-label">Zip Code:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.zipCode}">Zip Code</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 sm-2 control-label">Address:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.address1 + ' ' + customer.address2}">Address</p>
+                    </div>
+                </div>
+            </form>
+            <a class="btn btn-primary" th:href="${'/customer/list'}">Return</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
