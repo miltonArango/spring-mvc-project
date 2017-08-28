@@ -32,8 +32,4 @@ public class UserServiceMapImpl extends AbstractMapService implements UserServic
         super.delete(id);
     }
 
-    @Override
-    protected void loadDomainObjects() {
-
-    }
 }

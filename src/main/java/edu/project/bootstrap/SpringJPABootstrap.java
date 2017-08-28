@@ -1,26 +1,28 @@
 package edu.project.bootstrap;
 
-import edu.project.domain.Customer;
-import edu.project.domain.Product;
-import edu.project.services.CustomerService;
+import edu.project.domain.*;
+import edu.project.enums.OrderStatus;
+import edu.project.services.OrderService;
 import edu.project.services.ProductService;
+import edu.project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by Marango on 05/03/2017.
- *
  *
  */
 @Component
 public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedEvent>{
 
     private ProductService productService;
-    private CustomerService customerService;
+    private UserService userService;
+    private OrderService orderService;
 
     @Autowired
     public void setProductService(ProductService productService) {
@@ -28,14 +30,55 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
     }
 
     @Autowired
-    public void setCustomerService(CustomerService customerService) {
-        this.customerService = customerService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         loadProducts();
-        loadCustomers();
+        loadUsersAndCustomers();
+        loadCarts();
+        loadOrderHistory();
+    }
+
+    private void loadCarts() {
+        List<User> users = (List<User>) userService.listAll();
+        List<Product> products = (List<Product>) productService.listAll();
+
+        users.forEach(user -> {
+            user.setCart(new Cart());
+            user.getCart().setUser(user);
+            CartDetail cartDetail = new CartDetail();
+            cartDetail.setProduct(products.get(0));
+            cartDetail.setQuantity(2);
+            user.getCart().addCartDetail(cartDetail);
+            userService.saveOrUpdate(user);
+        });
+    }
+
+    private void loadOrderHistory() {
+        List<User> users = (List<User>) userService.listAll();
+        List<Product> products = (List<Product>) productService.listAll();
+
+        users.forEach(user ->{
+            ProductOrder productOrder = new ProductOrder();
+            productOrder.setCustomer(user.getCustomer());
+            productOrder.setOrderStatus(OrderStatus.SHIPPED);
+
+            products.forEach(product -> {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setProduct(product);
+                orderDetail.setQuantity(1);
+                productOrder.addToOrderDetails(orderDetail);
+            });
+            orderService.saveOrUpdate(productOrder);
+        });
     }
 
     public void loadProducts(){
@@ -71,49 +114,56 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         productService.saveOrUpdate(product5);
     }
 
-    public void loadCustomers(){
+    public void loadUsersAndCustomers() {
+        User user1 = new User();
+        user1.setUsername("mweston");
+        user1.setPassword("password");
 
         Customer customer1 = new Customer();
-        customer1.setId(1);
-        customer1.setFirstName("John");
-        customer1.setLastName("Doe");
-        customer1.setPhone("555-23343");
-        customer1.setEmail("doe@mail.com");
-        customer1.setState("FL");
-        customer1.setCity("Miami");
-        customer1.setZipCode("339001");
-        customer1.setAddress1("BANANA ST");
-        customer1.setAddress2("128 NW");
+        customer1.setFirstName("Micheal");
+        customer1.setLastName("Weston");
+        customer1.setBillingAddress(new Address());
+        customer1.getBillingAddress().setAddressLine1("1 Main St");
+        customer1.getBillingAddress().setCity("Miami");
+        customer1.getBillingAddress().setState("Florida");
+        customer1.getBillingAddress().setZipCode("33101");
+        customer1.setEmail("micheal@burnnotice.com");
+        customer1.setPhone("305.333.0101");
+        user1.setCustomer(customer1);
+        userService.saveOrUpdate(user1);
 
-        customerService.saveOrUpdate(customer1);
+        User user2 = new User();
+        user2.setUsername("fglenanne");
+        user2.setPassword("password");
 
         Customer customer2 = new Customer();
-        customer2.setId(2);
-        customer2.setFirstName("Jane");
-        customer2.setLastName("Doe");
-        customer2.setPhone("555-23343");
-        customer2.setEmail("jdoe@mail.com");
-        customer2.setState("FL");
-        customer2.setCity("Miami");
-        customer2.setZipCode("339001");
-        customer2.setAddress1("BANANA ST");
-        customer2.setAddress2("128 NW");
+        customer2.setFirstName("Fiona");
+        customer2.setLastName("Glenanne");
+        customer2.setBillingAddress(new Address());
+        customer2.getBillingAddress().setAddressLine1("1 Key Biscane Ave");
+        customer2.getBillingAddress().setCity("Miami");
+        customer2.getBillingAddress().setState("Florida");
+        customer2.getBillingAddress().setZipCode("33101");
+        customer2.setEmail("fiona@burnnotice.com");
+        customer2.setPhone("305.323.0233");
+        user2.setCustomer(customer2);
+        userService.saveOrUpdate(user2);
 
-        customerService.saveOrUpdate(customer2);
-
+        User user3 = new User();
+        user3.setUsername("saxe");
+        user3.setPassword("password");
         Customer customer3 = new Customer();
-        customer3.setId(3);
-        customer3.setFirstName("Frank");
-        customer3.setLastName("Castle");
-        customer3.setPhone("555-23323");
-        customer3.setEmail("castle@mail.com");
-        customer3.setState("FL");
-        customer3.setCity("Miami");
-        customer3.setZipCode("339009");
-        customer3.setAddress1("MURDER ST");
-        customer3.setAddress2("EAST AVE.");
+        customer3.setFirstName("Sam");
+        customer3.setLastName("Axe");
+        customer3.setBillingAddress(new Address());
+        customer3.getBillingAddress().setAddressLine1("1 Little Cuba Road");
+        customer3.getBillingAddress().setCity("Miami");
+        customer3.getBillingAddress().setState("Florida");
+        customer3.getBillingAddress().setZipCode("33101");
+        customer3.setEmail("sam@burnnotice.com");
+        customer3.setPhone("305.426.9832");
 
-        customerService.saveOrUpdate(customer3);
-
+        user3.setCustomer(customer3);
+        userService.saveOrUpdate(user3);
     }
 }

@@ -51,11 +51,6 @@ public class CustomerServiceJpaDaoImplTest {
         testCustomer.setLastName("Client");
         testCustomer.setPhone("555-23323");
         testCustomer.setEmail("castle@mail.com");
-        testCustomer.setState("FL");
-        testCustomer.setCity("Miami");
-        testCustomer.setZipCode("339009");
-        testCustomer.setAddress1("MURDER ST");
-        testCustomer.setAddress2("EAST AVE.");
 
         customerService.saveOrUpdate(testCustomer);
 
