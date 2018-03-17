@@ -6,8 +6,7 @@ import edu.project.services.ProductService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by Marango on 17/02/2017.

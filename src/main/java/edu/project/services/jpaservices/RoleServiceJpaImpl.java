@@ -1,42 +1,40 @@
 package edu.project.services.jpaservices;
 
-import edu.project.domain.Product;
-import edu.project.services.ProductService;
+import edu.project.domain.security.Role;
+import edu.project.services.RoleService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-/**
- * Created by Marango on 05/03/2017.
- *
- */
 @Service
 @Profile("jpadao")
-public class ProductServiceJpaDaoImpl extends AbstractJpaDaoService implements ProductService {
+public class RoleServiceJpaImpl extends AbstractJpaDaoService implements RoleService {
 
     @Override
-    public List<Product> listAll() {
+    public List<?> listAll() {
         EntityManager em = emf.createEntityManager();
-        return em.createQuery("FROM Product", Product.class).getResultList();
+
+        return em.createQuery("from Role", Role.class).getResultList();
     }
 
     @Override
-    public Product getById(Integer id) {
+    public Role getById(Integer id) {
         EntityManager em = emf.createEntityManager();
-        return em.find(Product.class, id);
+        return em.find(Role.class, id);
     }
 
     @Override
-    public Product saveOrUpdate(Product domainObject) {
+    public Role saveOrUpdate(Role domainObject) {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        Product savedProduct = em.merge(domainObject);
+
+        Role saveRole = em.merge(domainObject);
         em.getTransaction().commit();
 
-        return savedProduct;
+        return saveRole;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class ProductServiceJpaDaoImpl extends AbstractJpaDaoService implements P
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        em.remove(em.find(Product.class, id));
+        em.remove(em.find(Role.class, id));
         em.getTransaction().commit();
     }
 }

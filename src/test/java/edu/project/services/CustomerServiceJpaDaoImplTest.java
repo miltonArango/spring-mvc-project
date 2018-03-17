@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -23,27 +24,26 @@ public class CustomerServiceJpaDaoImplTest {
 
     private CustomerService customerService;
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     public void setCustomerService(CustomerService customerService) {
         this.customerService = customerService;
     }
 
     @Test
-    public void testListMethod() throws Exception {
+    public void testListMethod() {
         List<Customer> customers = (List<Customer>) customerService.listAll();
-        assert customers.size() == 3;
+        assertEquals(4, customers.size());
     }
 
     @Test
-    public void testGetById() throws Exception {
+    public void testGetById() {
         Integer id = 1;
         Customer returnedCustomer = customerService.getById(id);
         assert returnedCustomer.getId() == id;
     }
 
     @Test
-    public void testSave() throws Exception {
+    public void testSave() {
 
         Customer testCustomer = new Customer();
 
@@ -58,7 +58,7 @@ public class CustomerServiceJpaDaoImplTest {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void testUpdate() {
         Integer id = 1;
         String testFirstName = "Test";
 
@@ -68,13 +68,6 @@ public class CustomerServiceJpaDaoImplTest {
         customerService.saveOrUpdate(sampleCustomer);
 
         assert customerService.getById(id).getFirstName().equals(testFirstName);
-    }
-
-    @Test
-    public void testDelete() throws Exception {
-        Integer id = 1;
-        customerService.delete(id);
-        assert customerService.listAll().size() == 2;
     }
 
     @Test

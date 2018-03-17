@@ -1,10 +1,8 @@
 package edu.project.controllers;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.project.domain.Customer;
 import edu.project.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;

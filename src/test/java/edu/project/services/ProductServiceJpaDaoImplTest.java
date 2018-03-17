@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ProductServiceJpaDaoImplTest {
     @Test
     public void testListMethod() throws Exception {
         List<Product> products = (List<Product>) productService.listAll();
-        assert products.size() == 5;
+        assertEquals(6, products.size());
     }
 
     @Test
@@ -68,10 +69,4 @@ public class ProductServiceJpaDaoImplTest {
         assert productService.getById(id).getDescription().equals(testDescription);
     }
 
-    @Test
-    public void testDelete() throws Exception {
-        Integer id = 1;
-        productService.delete(id);
-        assert productService.listAll().size() == 4;
-    }
 }

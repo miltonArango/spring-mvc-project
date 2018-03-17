@@ -1,6 +1,8 @@
 package edu.project.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * Created by Marango on 15/03/2017.

@@ -1,6 +1,9 @@
 package edu.project.domain;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 /**
  * Created by Marango on 18/02/2017.
@@ -20,7 +23,7 @@ public class Customer extends AbstractDomainClass {
     @Embedded
     private Address shippingAddress;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private User user;
 
     public String getFirstName() {

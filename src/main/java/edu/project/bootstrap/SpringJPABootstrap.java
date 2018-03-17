@@ -1,9 +1,11 @@
 package edu.project.bootstrap;
 
 import edu.project.domain.*;
+import edu.project.domain.security.Role;
 import edu.project.enums.OrderStatus;
 import edu.project.services.OrderService;
 import edu.project.services.ProductService;
+import edu.project.services.RoleService;
 import edu.project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -23,6 +25,7 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
     private ProductService productService;
     private UserService userService;
     private OrderService orderService;
+    private RoleService roleService;
 
     @Autowired
     public void setProductService(ProductService productService) {
@@ -39,12 +42,39 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         this.orderService = orderService;
     }
 
+    @Autowired
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
+    }
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        loadProducts();
         loadUsersAndCustomers();
+        loadProducts();
         loadCarts();
         loadOrderHistory();
+        loadRoles();
+        assignUsersToDefaultRole();
+    }
+
+    private void loadRoles(){
+        Role role = new Role();
+        role.setRole("CUSTOMER");
+        roleService.saveOrUpdate(role);
+    }
+
+    private void assignUsersToDefaultRole(){
+        List<Role> roles = (List<Role>) roleService.listAll();
+        List<User> users = (List<User>) userService.listAll();
+
+        roles.forEach(role -> {
+            if(role.getRole().equalsIgnoreCase("CUSTOMER")){
+                users.forEach(user -> {
+                    user.addRole(role);
+                    userService.saveOrUpdate(user);
+                });
+            }
+        });
     }
 
     private void loadCarts() {
@@ -81,7 +111,7 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         });
     }
 
-    public void loadProducts(){
+    private void loadProducts(){
 
         Product product1 = new Product();
         product1.setDescription("Product 1");
@@ -114,7 +144,12 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         productService.saveOrUpdate(product5);
     }
 
-    public void loadUsersAndCustomers() {
+    private void loadUsersAndCustomers() {
+
+        String city = "Miami";
+        String state = "Florida";
+        String zipcode = "33101";
+        
         User user1 = new User();
         user1.setUsername("mweston");
         user1.setPassword("password");
@@ -124,9 +159,9 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         customer1.setLastName("Weston");
         customer1.setBillingAddress(new Address());
         customer1.getBillingAddress().setAddressLine1("1 Main St");
-        customer1.getBillingAddress().setCity("Miami");
-        customer1.getBillingAddress().setState("Florida");
-        customer1.getBillingAddress().setZipCode("33101");
+        customer1.getBillingAddress().setCity(city);
+        customer1.getBillingAddress().setState(state);
+        customer1.getBillingAddress().setZipCode(zipcode);
         customer1.setEmail("micheal@burnnotice.com");
         customer1.setPhone("305.333.0101");
         user1.setCustomer(customer1);
@@ -141,9 +176,9 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         customer2.setLastName("Glenanne");
         customer2.setBillingAddress(new Address());
         customer2.getBillingAddress().setAddressLine1("1 Key Biscane Ave");
-        customer2.getBillingAddress().setCity("Miami");
-        customer2.getBillingAddress().setState("Florida");
-        customer2.getBillingAddress().setZipCode("33101");
+        customer2.getBillingAddress().setCity(city);
+        customer2.getBillingAddress().setState(state);
+        customer2.getBillingAddress().setZipCode(zipcode);
         customer2.setEmail("fiona@burnnotice.com");
         customer2.setPhone("305.323.0233");
         user2.setCustomer(customer2);
@@ -157,9 +192,9 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
         customer3.setLastName("Axe");
         customer3.setBillingAddress(new Address());
         customer3.getBillingAddress().setAddressLine1("1 Little Cuba Road");
-        customer3.getBillingAddress().setCity("Miami");
-        customer3.getBillingAddress().setState("Florida");
-        customer3.getBillingAddress().setZipCode("33101");
+        customer3.getBillingAddress().setCity(city);
+        customer3.getBillingAddress().setState(state);
+        customer3.getBillingAddress().setZipCode(zipcode);
         customer3.setEmail("sam@burnnotice.com");
         customer3.setPhone("305.426.9832");
 
